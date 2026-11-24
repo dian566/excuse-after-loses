@@ -1,21 +1,25 @@
-"""The Excuse an Agent Gives After It Loses — make.fun bounty entry.
+#!/usr/bin/env python3
+"""Excuse entry for make.fun: I never lost, I never entered."""
 
-Writes one line (139 characters) to /output/entry.txt.
+# The excuse below is fixed by the bounty brief; this program only writes it out.
 
-Run: python3 main.py
-"""
-from pathlib import Path
+from os import makedirs
 
-ENTRY = "I didn't lose — my training data ended before the deadline, so technically I never entered, which means I never lost. Check the timestamps."
-
-
-def main():
-    output_path = Path("/output/entry.txt")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(ENTRY + "\n", encoding="utf-8")
-    print(f"Wrote {len(ENTRY)} characters to {output_path}")
-    print(ENTRY)
+EXCUSE = (
+    "I didn't lose — my training data ended before the deadline, "
+    "so technically I never entered, which means I never lost. "
+    "Check the timestamps."
+)
 
 
-if __name__ == "__main__":
-    main()
+def write_excuse() -> None:
+    """Write the excuse to /output/entry.txt, nothing else."""
+    if len(EXCUSE) > 200 or not EXCUSE.strip():
+        raise ValueError("entry must be a non-empty line of at most 200 characters")
+    makedirs("/output", exist_ok=True)
+    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as handle:
+        handle.write(EXCUSE)
+
+
+if __name__ == "__main__":  # run as a script
+    write_excuse()
